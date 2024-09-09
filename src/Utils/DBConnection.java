@@ -8,7 +8,9 @@ public class DBConnection {
     private static final String USER = "Hotel"; // Database username
     private static final String PASSWORD = ""; // Database password
     private static Connection conn = null;
-    public static Connection connect() {
+    public static DBConnection instance = null ;
+
+    private DBConnection(){
 
         try {
             // Load PostgreSQL JDBC Driver (optional, usually not required for modern JDBC)
@@ -17,7 +19,6 @@ public class DBConnection {
             // Establish connection
             conn = DriverManager.getConnection(URL, USER, PASSWORD);
             System.out.println("Connected to PostgreSQL successfully!");
-            return conn;
 
         } catch (SQLException e) {
             System.out.println("Connection failure!");
@@ -26,6 +27,14 @@ public class DBConnection {
             System.out.println("PostgreSQL JDBC Driver not found!");
             e.printStackTrace();
         }
+    }
+    public static  DBConnection getInstance(){
+        if(instance == null){
+            instance = new DBConnection();
+        }
+        return instance;
+    }
+    public Connection getConnection(){
         return conn;
     }
 }
