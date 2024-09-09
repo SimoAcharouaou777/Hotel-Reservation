@@ -1,9 +1,11 @@
 package Enums;
 
 public enum RoomType {
+    //Room types
     SINGLE ("Single Room",50.00),
     DOUBLE ("Double Room",75.00),
     TRIPLE ("Triple Room",100.00);
+
 
     private final String description;
     private final double price;
