@@ -6,7 +6,9 @@ import Service.UserService;
 import java.util.Scanner;
 
 public class UserController {
+
     private UserService userService;
+
     public UserController(){
         this.userService = new UserService();
     }
@@ -23,7 +25,7 @@ public class UserController {
         System.out.println("User signed up successfully!");
     }
 
-    public void signIn(){
+    public boolean signIn(){
         Scanner sc = new Scanner(System.in);
         System.out.println("Enter your email : ");
         String email1 = sc.nextLine();
@@ -32,8 +34,10 @@ public class UserController {
         User user = userService.signIn(email1,password1);
         if(user != null){
             System.out.println("User signed in successfully!");
+            return true;
         }else{
             System.out.println("Invalid email or password!");
+            return false;
         }
     }
 
