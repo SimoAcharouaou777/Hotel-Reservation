@@ -35,6 +35,14 @@ public class DBConnection {
         return instance;
     }
     public Connection getConnection(){
+        try{
+            if(conn == null || conn.isClosed()){
+                conn = DriverManager.getConnection(URL, USER, PASSWORD);
+            }
+        }catch(SQLException e){
+            System.out.println("Failed to re-establish connection!");
+            e.printStackTrace();
+        }
         return conn;
     }
 }

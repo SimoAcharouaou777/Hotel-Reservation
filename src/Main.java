@@ -1,7 +1,6 @@
 import Controller.UserController;
 import Service.UserService;
 import Utils.DBConnection;
-
 import java.util.Scanner;
 
 //TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
@@ -10,7 +9,6 @@ public class Main {
     public static void main(String[] args) {
         DBConnection.getInstance();
         Scanner sc = new Scanner(System.in);
-        UserService userService = new UserService();
         UserController userController = new UserController();
         boolean exit = false;
         while(!exit){
