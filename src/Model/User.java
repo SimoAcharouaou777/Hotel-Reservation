@@ -5,11 +5,13 @@ public class User {
     private String name;
     private String email;
     private String password;
+    private String cin;
 
     public User() {
         this.name = name;
         this.email = email;
         this.password = password;
+        this.cin = cin;
     }
     public int getId(){
         return id;
@@ -26,6 +28,7 @@ public class User {
     public String getPassword() {
         return password;
     }
+    public String getCin(){return cin;}
     public void setName(String name) {
         this.name = name;
     }
@@ -35,9 +38,10 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+    public void setCin(String cin){this.cin = cin;}
     @Override
     public String toString() {
-        return "Client [name=" + name + ", email=" + email +  "]";
+        return "Client [name=" + name + ", email=" + email + "Cin= "+ cin + "]";
     }
 
 }

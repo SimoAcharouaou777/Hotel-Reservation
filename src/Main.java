@@ -1,5 +1,6 @@
+import Controller.ReservationController;
+import Controller.RoomController;
 import Controller.UserController;
-import Service.UserService;
 import Utils.DBConnection;
 import java.util.Scanner;
 
@@ -10,6 +11,9 @@ public class Main {
         DBConnection.getInstance();
         Scanner sc = new Scanner(System.in);
         UserController userController = new UserController();
+        RoomController roomController = new RoomController();
+        roomController.initializeRooms();
+        ReservationController reservationController = new ReservationController();
         boolean exit = false;
         while(!exit){
           System.out.println("\n=== Hotel Reservation System ===");
@@ -26,7 +30,7 @@ public class Main {
                   break;
               case 2 :
                   if(userController.signIn()){
-                      displayLoggedInMenu(sc, userController);
+                      displayLoggedInMenu(sc, reservationController,userController);
                   }
                   break;
               case 3 :
@@ -38,7 +42,7 @@ public class Main {
         }
     }
 
-    private static void displayLoggedInMenu(Scanner sc, UserController userController){
+    private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController){
         boolean loggedIn = true;
         while(loggedIn){
             System.out.println("\n=== Hotel Reservation System ===");
@@ -54,7 +58,7 @@ public class Main {
 
             switch(choice){
                 case 1:
-                    System.out.println("reservation selected");
+                    reservationController.createReservation(sc);
                     break;
                 case 2:
                     System.out.println("modify reservation selected");

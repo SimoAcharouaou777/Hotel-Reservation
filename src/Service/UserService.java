@@ -11,12 +11,13 @@ public class UserService {
         this.userRepository = new UserRepository();
     }
 
-    public void signUp(String name, String email , String password){
+    public void signUp(String name, String email , String password, String cin){
         String hashedPassword = hashPassword(password);
         User user = new User();
         user.setName(name);
         user.setEmail(email);
         user.setPassword(hashedPassword);
+        user.setCin(cin);
         userRepository.insertUser(user);
     }
     public User signIn(String email , String password){

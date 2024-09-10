@@ -10,12 +10,13 @@ import java.sql.SQLException;
 
 public class UserRepository {
     public void insertUser(User user){
-        String sql = "INSERT INTO users (name, email , password) VALUES (?,?,?)";
+        String sql = "INSERT INTO users (name, email , password, cin) VALUES (?,?,?,?)";
         try (Connection conn = DBConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)){
             stmt.setString(1, user.getName());
             stmt.setString(2, user.getEmail());
             stmt.setString(3, user.getPassword());
+            stmt.setString(4,user.getCin());
             stmt.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
@@ -38,6 +39,7 @@ public class UserRepository {
                 user.setName(rs.getString("name"));
                 user.setEmail(rs.getString("email"));
                 user.setPassword(rs.getString("password"));
+                user.setCin(rs.getString("cin"));
             }
         } catch (SQLException e){
             e.printStackTrace();
