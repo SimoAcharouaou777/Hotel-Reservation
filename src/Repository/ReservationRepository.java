@@ -45,4 +45,18 @@ public class ReservationRepository {
         }
         return reservations;
     }
+    public int getUserIdByCin(String cin) {
+        String sql = "SELECT id FROM users WHERE cin = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setString(1, cin);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                return rs.getInt("id");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return -1;
+    }
 }
