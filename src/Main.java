@@ -1,6 +1,8 @@
 import Controller.ReservationController;
 import Controller.RoomController;
 import Controller.UserController;
+import Model.Hotel;
+import Repository.HotelRepository;
 import Utils.DBConnection;
 import java.util.Scanner;
 
@@ -12,8 +14,12 @@ public class Main {
         Scanner sc = new Scanner(System.in);
         UserController userController = new UserController();
         RoomController roomController = new RoomController();
-        roomController.initializeRooms();
         ReservationController reservationController = new ReservationController();
+        HotelRepository hotelRepository = new HotelRepository();
+        Hotel hotel = new Hotel();
+        hotel.setName("Al-Adarisa");
+        int hotelId = hotelRepository.insertHotelIfNotExists(hotel);
+        roomController.initializeRooms(hotelId);
         boolean exit = false;
         while(!exit){
           System.out.println("\n=== Hotel Reservation System ===");

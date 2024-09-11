@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ReservationRepository {
     public void insertReservation(Reservation reservation) {
-        String sql = "INSERT INTO reservation (userId,roomId,StartDate,EndDate) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO reservations (user_id,room_id,start_date,end_date) VALUES(?,?,?,?)";
         try (Connection conn = DBConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             stmt.setInt(1, reservation.getUserId());
@@ -27,17 +27,17 @@ public class ReservationRepository {
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = new ArrayList<>();
-        String sql = "SELECT * FROM reservation";
+        String sql = "SELECT * FROM reservations";
         try (Connection conn = DBConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
             ResultSet rs = stmt.executeQuery();
             while (rs.next()) {
                 Reservation reservation = new Reservation();
                 reservation.setId(rs.getInt("id"));
-                reservation.setUserId(rs.getInt("userId"));
-                reservation.setRoomId(rs.getInt("roomId"));
-                reservation.setStartDate(rs.getDate("StartDate"));
-                reservation.setEndDate(rs.getDate("EndDate"));
+                reservation.setUserId(rs.getInt("user_id"));
+                reservation.setRoomId(rs.getInt("room_id"));
+                reservation.setStartDate(rs.getDate("start_date"));
+                reservation.setEndDate(rs.getDate("end_date"));
                 reservations.add(reservation);
             }
         } catch (SQLException e) {

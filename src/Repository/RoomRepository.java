@@ -11,11 +11,12 @@ import java.sql.SQLException;
 
 public class RoomRepository {
     public void insertRoom(Room room){
-        String sql = "INSERT INTO rooms (room_type, price) VALUES (?,?)";
+        String sql = "INSERT INTO rooms (hotel_id,room_type, price) VALUES (?,?,?)";
         try(Connection conn = DBConnection.getInstance().getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)){
-                stmt.setString(1,room.getType().name());
-                stmt.setDouble(2,room.getPrice());
+                stmt.setInt(1,room.getHotelId());
+                stmt.setString(2,room.getType().name());
+                stmt.setDouble(3,room.getPrice());
                 stmt.executeUpdate();
         }catch(SQLException e){
             e.printStackTrace();

@@ -8,7 +8,7 @@ public class RoomController {
     public RoomController(){
         this.roomService = new RoomService();
     }
-    public void initializeRooms(){
-        roomService.insertRooms();
+    public void initializeRooms(int hotelId){
+        roomService.insertRooms(hotelId);
     }
 }
