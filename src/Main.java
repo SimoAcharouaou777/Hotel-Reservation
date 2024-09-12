@@ -67,7 +67,7 @@ public class Main {
                     reservationController.createReservation(sc);
                     break;
                 case 2:
-                    System.out.println("modify reservation selected");
+                    reservationController.modifyReservation(sc);
                     break;
                 case 3:
                     System.out.println("cancel reservation selected");

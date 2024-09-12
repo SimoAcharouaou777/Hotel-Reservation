@@ -24,4 +24,8 @@ public class ReservationService {
         }
         return reservationMap;
     }
+
+    public void updateReservation(Reservation reservation, int oldRoomId){
+        reservationRepository.updateReservation(reservation, oldRoomId);
+    }
 }

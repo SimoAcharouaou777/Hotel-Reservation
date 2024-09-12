@@ -59,4 +59,46 @@ public class ReservationController {
     private int getUserByCin(String cin) {
         return reservationRepository.getUserIdByCin(cin);
     }
+
+    public void modifyReservation(Scanner sc){
+        System.out.println("Enter reservation ID: ");
+        int reservationId = sc.nextInt();
+        sc.nextLine();
+
+        Reservation existingReservation = reservationRepository.getReservationById(reservationId);
+        if(existingReservation == null){
+            System.out.println("Reservation not found!");
+            return;
+        }
+        int oldRoomId = existingReservation.getRoomId();
+
+        System.out.println("Enter new room ID: ");
+        int newRoomId = sc.nextInt();
+        sc.nextLine();
+        System.out.println("Enter new check-in date (yyyy-mm-dd): ");
+        String newCheckInDate = sc.nextLine();
+        System.out.println("Enter new check-out date (yyyy-mm-dd): ");
+        String newCheckOutDate = sc.nextLine();
+
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        try{
+            java.util.Date startDate = dateFormat.parse(newCheckInDate);
+            java.util.Date endDate = dateFormat.parse(newCheckOutDate);
+
+            if(!reservationRepository.isRoomAvailable(newRoomId)){
+                System.out.println("Room is not available!");
+                return;
+            }
+            existingReservation.setRoomId(newRoomId);
+            existingReservation.setStartDate(new java.sql.Date(startDate.getTime()));
+            existingReservation.setEndDate(new java.sql.Date(endDate.getTime()));
+
+            reservationService.updateReservation(existingReservation, oldRoomId);
+            System.out.println("Reservation updated successfully!");
+        }catch(ParseException e){
+            System.out.println("Invalid date format!");
+        }
+    }
 }
+
+

@@ -82,4 +82,54 @@ public class ReservationRepository {
         }
         return -1;
     }
+
+    public Reservation getReservationById(int reservationId){
+        String sql = "SELECT * FROM reservations WHERE id = ?";
+        try(Connection conn = DBConnection.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1,reservationId);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                Reservation reservation = new Reservation();
+                reservation.setId(rs.getInt("id"));
+                reservation.setUserId(rs.getInt("user_id"));
+                reservation.setRoomId(rs.getInt("room_id"));
+                reservation.setStartDate(rs.getDate("start_date"));
+                reservation.setEndDate(rs.getDate("end_date"));
+                return reservation;
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public void updateReservation(Reservation reservation, int oldRoomId) {
+        String updateReservationSql = "UPDATE reservations SET room_id = ?, start_date = ?, end_date = ? WHERE id = ?";
+        String updateOldRoomStatus = "UPDATE rooms SET available = true WHERE id = ?";
+        String updateNewRoomStatus = "UPDATE rooms SET available = false WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement updateReservationStmt = conn.prepareStatement(updateReservationSql);
+             PreparedStatement updateOldRoomStmt = conn.prepareStatement(updateOldRoomStatus);
+             PreparedStatement updateNewRoomStmt = conn.prepareStatement(updateNewRoomStatus)) {
+            conn.setAutoCommit(false);
+
+            updateReservationStmt.setInt(1, reservation.getRoomId());
+            updateReservationStmt.setDate(2, reservation.getStartDate());
+            updateReservationStmt.setDate(3, reservation.getEndDate());
+            updateReservationStmt.setInt(4, reservation.getId());
+            updateReservationStmt.executeUpdate();
+
+            updateOldRoomStmt.setInt(1, oldRoomId);
+            updateOldRoomStmt.executeUpdate();
+
+            updateNewRoomStmt.setInt(1, reservation.getRoomId());
+            updateNewRoomStmt.executeUpdate();
+
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }
