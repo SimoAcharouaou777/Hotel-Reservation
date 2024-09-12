@@ -40,6 +40,10 @@ public class ReservationController {
                 System.out.println("User not found!");
                 return;
             }
+            if(!reservationRepository.isRoomAvailable(roomId)){
+                System.out.println("Room is not available!");
+                return;
+            }
             Reservation reservation = new Reservation();
             reservation.setUserId(userId);
             reservation.setRoomId(roomId);

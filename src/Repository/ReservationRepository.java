@@ -13,17 +13,40 @@ import java.util.List;
 public class ReservationRepository {
     public void insertReservation(Reservation reservation) {
         String sql = "INSERT INTO reservations (user_id,room_id,start_date,end_date) VALUES(?,?,?,?)";
+        String updateRoomStatus = "UPDATE rooms SET available = false WHERE id = ?";
         try (Connection conn = DBConnection.getInstance().getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement updateRoomStmt = conn.prepareStatement(updateRoomStatus)) {
+            conn.setAutoCommit(false);
             stmt.setInt(1, reservation.getUserId());
             stmt.setInt(2, reservation.getRoomId());
             stmt.setObject(3, reservation.getStartDate());
             stmt.setObject(4, reservation.getEndDate());
             stmt.executeUpdate();
+            updateRoomStmt.setInt(1, reservation.getRoomId());
+            updateRoomStmt.executeUpdate();
+            conn.commit();
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
+
+    public boolean isRoomAvailable(int roomId){
+        String sql = "SELECT available FROM rooms WHERE id = ?";
+        try(Connection conn = DBConnection.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)){
+            stmt.setInt(1,roomId);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                return rs.getBoolean("available");
+            }
+
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+        return false;
+    }
+
 
     public List<Reservation> getAllReservations() {
         List<Reservation> reservations = new ArrayList<>();
