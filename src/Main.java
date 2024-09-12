@@ -70,7 +70,7 @@ public class Main {
                     reservationController.modifyReservation(sc);
                     break;
                 case 3:
-                    System.out.println("cancel reservation selected");
+                    reservationController.cancelReservation(sc);
                     break;
                 case 4:
                     System.out.println("view reservation details selected");

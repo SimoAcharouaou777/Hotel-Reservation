@@ -28,4 +28,8 @@ public class ReservationService {
     public void updateReservation(Reservation reservation, int oldRoomId){
         reservationRepository.updateReservation(reservation, oldRoomId);
     }
+
+    public void cancelReservation(int reservationId, int roomId){
+        reservationRepository.cancelReservation(reservationId, roomId);
+    }
 }

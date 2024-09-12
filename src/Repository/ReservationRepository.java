@@ -132,4 +132,21 @@ public class ReservationRepository {
         }
     }
 
+    public void cancelReservation(int reservationId, int roomId) {
+        String sql = "DELETE FROM reservations WHERE id = ?";
+        String updateRoomStatus = "UPDATE rooms SET available = true WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement updateRoomStmt = conn.prepareStatement(updateRoomStatus)) {
+            conn.setAutoCommit(false);
+
+            stmt.setInt(1, reservationId);
+            stmt.executeUpdate();
+            updateRoomStmt.setInt(1, roomId);
+            updateRoomStmt.executeUpdate();
+            conn.commit();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 }

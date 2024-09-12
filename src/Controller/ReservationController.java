@@ -99,6 +99,19 @@ public class ReservationController {
             System.out.println("Invalid date format!");
         }
     }
+
+    public void cancelReservation(Scanner sc){
+        System.out.println("Enter reservation ID: ");
+        int reservationId = sc.nextInt();
+        sc.nextLine();
+        Reservation existingReservation = reservationRepository.getReservationById(reservationId);
+        if(existingReservation == null){
+            System.out.println("Reservation not found!");
+            return;
+        }
+        reservationService.cancelReservation(existingReservation.getId(), existingReservation.getRoomId());
+        System.out.println("Reservation cancelled successfully!");
+    }
 }
 
 
