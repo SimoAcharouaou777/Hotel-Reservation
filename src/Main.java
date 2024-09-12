@@ -2,6 +2,7 @@ import Controller.ReservationController;
 import Controller.RoomController;
 import Controller.UserController;
 import Model.Hotel;
+import Model.Room;
 import Repository.HotelRepository;
 import Utils.DBConnection;
 import java.util.Scanner;
@@ -36,7 +37,7 @@ public class Main {
                   break;
               case 2 :
                   if(userController.signIn()){
-                      displayLoggedInMenu(sc, reservationController,userController);
+                      displayLoggedInMenu(sc, reservationController,userController, roomController);
                   }
                   break;
               case 3 :
@@ -48,7 +49,7 @@ public class Main {
         }
     }
 
-    private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController){
+    private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController , RoomController roomController){
         boolean loggedIn = true;
         int userId = userController.getCurrentUser();
         while(loggedIn){
@@ -77,7 +78,7 @@ public class Main {
                     reservationController.viewUserReservations(userId);
                     break;
                 case 5:
-                    System.out.println("check room availability selected");
+                   roomController.checkAllRoomsAvailability();
                     break;
                 case 6:
                     loggedIn = false;

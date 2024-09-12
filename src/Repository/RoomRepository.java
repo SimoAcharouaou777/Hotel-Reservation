@@ -36,4 +36,17 @@ public class RoomRepository {
        }
        return false;
     }
+
+    public void checkAllRoomsAvailability(){
+        String sql = "SELECT * FROM rooms";
+        try(Connection conn = DBConnection.getInstance().getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()){
+            while(rs.next()){
+                System.out.println("Room ID: "+rs.getInt("id")+" Room Type: "+rs.getString("room_type")+" Price: "+rs.getDouble("price")+" Available: "+rs.getBoolean("available"));
+            }
+        }catch(SQLException e){
+            e.printStackTrace();
+        }
+    }
 }

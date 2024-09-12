@@ -24,4 +24,7 @@ public class RoomService {
             roomRepository.insertRoom(room4);
         }
     }
+    public void checkAllRoomsAvailability(){
+        roomRepository.checkAllRoomsAvailability();
+    }
 }

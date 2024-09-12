@@ -11,4 +11,8 @@ public class RoomController {
     public void initializeRooms(int hotelId){
         roomService.insertRooms(hotelId);
     }
+
+    public void checkAllRoomsAvailability(){
+        roomService.checkAllRoomsAvailability();
+    }
 }
