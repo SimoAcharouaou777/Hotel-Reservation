@@ -149,4 +149,58 @@ public class ReservationRepository {
             e.printStackTrace();
         }
     }
+
+    public String getRoomTypeById(int roomId) {
+        String roomType = "";
+        String query = "SELECT room_type FROM rooms WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, roomId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                roomType = rs.getString("room_type");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roomType;
+    }
+
+    public double getRoomPriceById(int roomId) {
+        double roomPrice = 0.0;
+        String query = "SELECT price FROM rooms WHERE id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(query)) {
+            stmt.setInt(1, roomId);
+            ResultSet rs = stmt.executeQuery();
+            if (rs.next()) {
+                roomPrice = rs.getDouble("price");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return roomPrice;
+    }
+
+    public List<Reservation> getReservationsByUserId(int userId) {
+        List<Reservation> reservations = new ArrayList<>();
+        String sql = "SELECT * FROM reservations WHERE user_id = ?";
+        try (Connection conn = DBConnection.getInstance().getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, userId);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                Reservation reservation = new Reservation();
+                reservation.setId(rs.getInt("id"));
+                reservation.setUserId(rs.getInt("user_id"));
+                reservation.setRoomId(rs.getInt("room_id"));
+                reservation.setStartDate(rs.getDate("start_date"));
+                reservation.setEndDate(rs.getDate("end_date"));
+                reservations.add(reservation);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return reservations;
+    }
 }

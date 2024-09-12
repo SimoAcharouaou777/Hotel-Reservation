@@ -50,6 +50,7 @@ public class Main {
 
     private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController){
         boolean loggedIn = true;
+        int userId = userController.getCurrentUser();
         while(loggedIn){
             System.out.println("\n=== Hotel Reservation System ===");
             System.out.println("1. Create Reservation");
@@ -73,7 +74,7 @@ public class Main {
                     reservationController.cancelReservation(sc);
                     break;
                 case 4:
-                    System.out.println("view reservation details selected");
+                    reservationController.viewUserReservations(userId);
                     break;
                 case 5:
                     System.out.println("check room availability selected");

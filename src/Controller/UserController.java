@@ -8,6 +8,7 @@ import java.util.Scanner;
 public class UserController {
 
     private UserService userService;
+    private User currentUser;
 
     public UserController(){
         this.userService = new UserService();
@@ -36,6 +37,7 @@ public class UserController {
         User user = userService.signIn(email1,password1);
         if(user != null){
             System.out.println("User signed in successfully!");
+            this.currentUser = user;
             return true;
         }else{
             System.out.println("Invalid email or password!");
@@ -43,4 +45,7 @@ public class UserController {
         }
     }
 
+    public int getCurrentUser(){
+        return currentUser != null ? currentUser.getId() : -1;
+    }
 }

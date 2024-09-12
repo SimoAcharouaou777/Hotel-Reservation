@@ -32,4 +32,13 @@ public class ReservationService {
     public void cancelReservation(int reservationId, int roomId){
         reservationRepository.cancelReservation(reservationId, roomId);
     }
+
+    public HashMap<Integer, Reservation> getUserReservations(int userId) {
+        List<Reservation> reservations = reservationRepository.getReservationsByUserId(userId);
+        HashMap<Integer, Reservation> reservationMap = new HashMap<>();
+        for (Reservation reservation : reservations) {
+            reservationMap.put(reservation.getId(), reservation);
+        }
+        return reservationMap;
+    }
 }

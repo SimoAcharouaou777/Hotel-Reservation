@@ -7,6 +7,7 @@ import Service.ReservationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.util.HashMap;
 import java.util.Scanner;
 
 public class ReservationController {
@@ -111,6 +112,24 @@ public class ReservationController {
         }
         reservationService.cancelReservation(existingReservation.getId(), existingReservation.getRoomId());
         System.out.println("Reservation cancelled successfully!");
+    }
+
+    public void viewUserReservations(int userId) {
+        HashMap<Integer, Reservation> reservations = reservationService.getUserReservations(userId);
+        if (reservations.isEmpty()) {
+            System.out.println("No reservations found!");
+            return;
+        }
+
+        for (Reservation reservation : reservations.values()) {
+            System.out.println("Reservation ID: " + reservation.getId());
+            System.out.println("Start Date: " + reservation.getStartDate());
+            System.out.println("End Date: " + reservation.getEndDate());
+            System.out.println("Room ID: " + reservation.getRoomId());
+            System.out.println("Room Type: " + reservationRepository.getRoomTypeById(reservation.getRoomId()));
+            System.out.println("Room Price: " + reservationRepository.getRoomPriceById(reservation.getRoomId()));
+            System.out.println("-----------------------------");
+        }
     }
 }
 
