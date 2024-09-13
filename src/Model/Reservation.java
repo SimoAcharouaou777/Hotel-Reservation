@@ -40,4 +40,5 @@ public class Reservation {
     public void setEndDate(Date EndDate){
         this.EndDate = EndDate;
     }
+
 }

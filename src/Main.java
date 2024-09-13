@@ -1,8 +1,8 @@
 import Controller.ReservationController;
 import Controller.RoomController;
 import Controller.UserController;
+import Controller.StatistiqueController;
 import Model.Hotel;
-import Model.Room;
 import Repository.HotelRepository;
 import Utils.DBConnection;
 import java.util.Scanner;
@@ -17,6 +17,7 @@ public class Main {
         RoomController roomController = new RoomController();
         ReservationController reservationController = new ReservationController();
         HotelRepository hotelRepository = new HotelRepository();
+        StatistiqueController statistiqueController = new StatistiqueController();
         Hotel hotel = new Hotel();
         hotel.setName("Al-Adarisa");
         int hotelId = hotelRepository.insertHotelIfNotExists(hotel);
@@ -37,7 +38,7 @@ public class Main {
                   break;
               case 2 :
                   if(userController.signIn()){
-                      displayLoggedInMenu(sc, reservationController,userController, roomController);
+                      displayLoggedInMenu(sc, reservationController,userController, roomController,statistiqueController);
                   }
                   break;
               case 3 :
@@ -49,7 +50,7 @@ public class Main {
         }
     }
 
-    private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController , RoomController roomController){
+    private static void displayLoggedInMenu(Scanner sc, ReservationController reservationController, UserController userController , RoomController roomController, StatistiqueController statistiqueController) {
         boolean loggedIn = true;
         int userId = userController.getCurrentUser();
         while(loggedIn){
@@ -59,7 +60,8 @@ public class Main {
             System.out.println("3. Cancel Reservation");
             System.out.println("4. View Reservation Details");
             System.out.println("5. Check Room Availability");
-            System.out.println("6. Log Out");
+            System.out.println("6. See statistiques");
+            System.out.println("7. Log Out");
             System.out.print("Choose an option: ");
             int choice = sc.nextInt();
             sc.nextLine();
@@ -81,6 +83,9 @@ public class Main {
                    roomController.checkAllRoomsAvailability();
                     break;
                 case 6:
+                    statistiqueController.getStatistique();
+                    break;
+                case 7:
                     loggedIn = false;
                     break;
 
