@@ -12,7 +12,7 @@ import java.util.List;
 
 public class ReservationRepository {
     public void insertReservation(Reservation reservation) {
-        String sql = "INSERT INTO reservations (user_id,room_id,start_date,end_date) VALUES(?,?,?,?)";
+        String sql = "INSERT INTO reservations (user_id,room_id,start_date,end_date, price) VALUES(?,?,?,?,?)";
         String updateRoomStatus = "UPDATE rooms SET available = false WHERE id = ?";
         try (Connection conn = DBConnection.getInstance().getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql);
@@ -22,6 +22,7 @@ public class ReservationRepository {
             stmt.setInt(2, reservation.getRoomId());
             stmt.setObject(3, reservation.getStartDate());
             stmt.setObject(4, reservation.getEndDate());
+            stmt.setDouble(5, reservation.getPrice());
             stmt.executeUpdate();
             updateRoomStmt.setInt(1, reservation.getRoomId());
             updateRoomStmt.executeUpdate();
@@ -61,6 +62,7 @@ public class ReservationRepository {
                 reservation.setRoomId(rs.getInt("room_id"));
                 reservation.setStartDate(rs.getDate("start_date"));
                 reservation.setEndDate(rs.getDate("end_date"));
+                reservation.setPrice(rs.getDouble("price"));
                 reservations.add(reservation);
             }
         } catch (SQLException e) {
@@ -96,6 +98,7 @@ public class ReservationRepository {
                 reservation.setRoomId(rs.getInt("room_id"));
                 reservation.setStartDate(rs.getDate("start_date"));
                 reservation.setEndDate(rs.getDate("end_date"));
+                reservation.setPrice(rs.getDouble("price"));
                 return reservation;
             }
         }catch(SQLException e){

@@ -9,6 +9,7 @@ public class Reservation {
     private int roomId;
     private Date StartDate;
     private Date EndDate;
+    private double price;
 
     public int getId(){
         return id;
@@ -39,6 +40,12 @@ public class Reservation {
     }
     public void setEndDate(Date EndDate){
         this.EndDate = EndDate;
+    }
+    public double getPrice(){
+        return price;
+    }
+    public void setPrice(double price){
+        this.price = price;
     }
 
 }

@@ -7,8 +7,11 @@ import Service.ReservationService;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.HashMap;
 import java.util.Scanner;
+import Utils.DateUtils;
+import Utils.PricingUtils;
 
 public class ReservationController {
     private ReservationService reservationService;
@@ -36,6 +39,11 @@ public class ReservationController {
             java.util.Date startDate = dateFormat.parse(checkInDate);
             java.util.Date endDate = dateFormat.parse(checkOutDate);
 
+            if(!validateDates(startDate, endDate)){
+                System.out.println("Invalid dates!");
+                return;
+            }
+
             int userId = getUserByCin(cin);
             if(userId == -1){
                 System.out.println("User not found!");
@@ -45,16 +53,32 @@ public class ReservationController {
                 System.out.println("Room is not available!");
                 return;
             }
+            String season = DateUtils.getSeason(LocalDate.now());
+            double basePrice = reservationRepository.getRoomPriceById(roomId);
+            double adjustedPrice = PricingUtils.adjustPriceForSeason(basePrice, season);
+
             Reservation reservation = new Reservation();
             reservation.setUserId(userId);
             reservation.setRoomId(roomId);
             reservation.setStartDate(new java.sql.Date(startDate.getTime()));
             reservation.setEndDate(new java.sql.Date(endDate.getTime()));
+            reservation.setPrice(adjustedPrice);
+
             reservationService.createReservation(reservation);
-            System.out.println("Reservation created successfully!");
+            System.out.println("Reservation created successfully with price : "+adjustedPrice);
         }catch(ParseException e){
             System.out.println("Invalid date format!");
         }
+    }
+
+    private boolean validateDates(java.util.Date startDate, java.util.Date endDate){
+        LocalDate today = LocalDate.now();
+        LocalDate startLocalDate = startDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+        LocalDate endLocalDate = endDate.toInstant().atZone(java.time.ZoneId.systemDefault()).toLocalDate();
+
+        return !startLocalDate.isAfter(endLocalDate) &&
+                !startLocalDate.isBefore(today) &&
+                !endLocalDate.isBefore(today);
     }
 
     private int getUserByCin(String cin) {
@@ -86,16 +110,27 @@ public class ReservationController {
             java.util.Date startDate = dateFormat.parse(newCheckInDate);
             java.util.Date endDate = dateFormat.parse(newCheckOutDate);
 
+            if(!validateDates(startDate, endDate)){
+                System.out.println("Invalid dates!");
+                return;
+            }
+
             if(!reservationRepository.isRoomAvailable(newRoomId)){
                 System.out.println("Room is not available!");
                 return;
             }
+
+            String season = DateUtils.getSeason(LocalDate.now());
+            double basePrice = reservationRepository.getRoomPriceById(newRoomId);
+            double adjustedPrice = PricingUtils.adjustPriceForSeason(basePrice, season);
+
             existingReservation.setRoomId(newRoomId);
             existingReservation.setStartDate(new java.sql.Date(startDate.getTime()));
             existingReservation.setEndDate(new java.sql.Date(endDate.getTime()));
+            existingReservation.setPrice(adjustedPrice);
 
             reservationService.updateReservation(existingReservation, oldRoomId);
-            System.out.println("Reservation updated successfully!");
+            System.out.println("Reservation updated successfully with price : "+adjustedPrice);
         }catch(ParseException e){
             System.out.println("Invalid date format!");
         }
